@@ -1,0 +1,30 @@
+[project]
+name = "jp-bizdata-eval"
+version = "0.1.0"
+description = "Contamination-free, deterministic execution & calculation benchmark for Japanese enterprise LLM workflows"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "duckdb>=1.1.0",
+    "httpx>=0.27.0",
+    "pydantic>=2.9.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.3.0",
+]
+
+[project.scripts]
+jp-eval = "jp_bizdata_eval.runner:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/jp_bizdata_eval"]
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+testpaths = ["tests"]

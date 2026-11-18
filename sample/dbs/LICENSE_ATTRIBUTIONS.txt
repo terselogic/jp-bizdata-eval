@@ -1,0 +1,12 @@
+Included sample databases for execution-based Text-to-SQL evaluation:
+
+1. jp_opendata_sample.sqlite (Tokyo 2,000-entity sample from terselogic/jp-opendata-db):
+   - National Tax Agency Corporate Number Publication Site (Public Data License v1.0)
+   - MLIT Position Reference Information 24.0a / 18.0b
+   - MLIT National Land Numerical Information Land Price Publication L01-25
+   - MHLW Long-Term Care Service Information Open Data (CC BY 4.0)
+   - Financial Services Agency (FSA) Licensed/Registered Financial Entities (Public Data License v1.0 / Government Standard Terms v2.0)
+
+2. edinet_pit_sample.duckdb (10-issuer x 2-year sample from terselogic/edinet-pit-dataset):
+   - Financial Services Agency (FSA) EDINET Public Filings
+   - Risk change cosine drift computed using intfloat/multilingual-e5-large

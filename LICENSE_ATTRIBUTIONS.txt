@@ -1,0 +1,23 @@
+License & Primary-Source Attributions for jp-bizdata-eval (Public 10-Task Sample)
+
+1. Evaluation Harness & Code-First Solvers (`src/`, `tests/`):
+   MIT License (Copyright (c) 2026 TerseLogic)
+
+2. Japanese Government Primary-Source Excerpts inside `context_document`:
+   Provided under Japan Public Data License 1.0 (PDL 1.0) with modifications
+   (excerpted and structured from original texts). Each task includes exact source URLs
+   in `audit.source_attributions`:
+   - e-Gov Law Search (Labor Standards Act 322AC0000000049, Overtime Order 406CO0000000005,
+     Toriteki Act 331AC0000000120, National Holiday Act 323AC1000000178)
+   - National Tax Agency (NTA) FY2026 (R8) Tax Revision Pamphlets, Invoice Q&As, Tax Answers 2792 & 2798
+   - Japan Fair Trade Commission (JFTC) & Small and Medium Enterprise Agency Toriteki Act Guidelines
+   - Ministry of Health, Labour and Welfare (MHLW) Childcare Short-Time Work Benefit Guidelines
+   - National Astronomical Observatory of Japan (NAOJ) 2026 Calendar
+
+3. Sample Databases (`sample/dbs/`):
+   See `sample/dbs/LICENSE_ATTRIBUTIONS.txt` for EDINET / NTA Corporate Number / MLIT / MHLW / FSA attributions.
+
+4. Curated Benchmark Task Prompts & Full Private Suites:
+   Copyright (c) 2026 TerseLogic. This 10-task pack (`sample/jp_bizdata_eval_teaser_10.jsonl`)
+   is released for public evaluation and testing. Full expanded suites (custom & multi-seed packs)
+   are available at https://terselogic.com/datasets/jp-bizdata-eval/
