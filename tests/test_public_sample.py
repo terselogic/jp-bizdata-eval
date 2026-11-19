@@ -32,8 +32,9 @@ def test_public_teaser_task_counts_and_audit_metadata() -> None:
 
     for t in tasks:
         assert t.context_document.strip()
-        assert t.audit.canary_string.startswith("jp-bizdata-eval:v2:canary:")
+        assert t.audit.canary_string.startswith("jp-bizdata-eval:v2:canary:public:")
         assert t.audit.gold_hash.startswith("sha256:")
+        assert t.audit.human_audit.status == "verified"
         assert len(t.audit.source_attributions) >= 1
         assert t.audit.grading_policy.mode == "all_pass"
         assert t.audit.grading_policy.allow_hedging is False

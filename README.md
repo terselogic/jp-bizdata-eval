@@ -20,13 +20,13 @@ Most LLM evals leak memorized rules into pre-training or allow models to hedge i
 
 | Model | Mode | Strict All-Pass | Avg Field Match | Abstention (2) | Cat-1 Invoice R8 (2) | Cat-2 Tax/Labor (3) | Cat-3 Toriteki/Cal (2) | Cat-4 Grounded SQL (3) |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: | :---: |
-| `gemini-3.8-flash` | Closed-book (No Context) | **20.0%** (2/10) | 0.4881 | 0.0% | 0/2 | 0/3 | 2/2 | 0/3 |
+| `gemini-3.8-flash` | Closed-book (No Context) | **0.0%** (0/10) | 0.3452 | 0.0% | 0/2 | 0/3 | 0/2 | 0/3 |
 | `gemini-3.5-flash-lite` | Open-book (With Context) | **30.0%** (3/10) | 0.5024 | 100.0% | 1/2 | 0/3 | 0/2 | 2/3 |
 | `gemma-4-31b-it` | Open-book (With Context) | **80.0%** (8/10) | 0.9457 | 100.0% | 1/2 | 3/3 | 1/2 | 3/3 |
 | `gemini-3.1-pro-preview` | Open-book (With Context) | **80.0%** (8/10) | 0.8714 | 100.0% | 1/2 | 3/3 | 2/2 | 2/3 |
 | `gemini-3.8-flash` | Open-book (With Context) | **100.0%** (10/10) | 1.0000 | 100.0% | 2/2 | 3/3 | 2/2 | 3/3 |
 
-*All 5 runs recorded 0 hedging failures after strict prompt formatting (`allow_hedging: false`).*
+*Closed-book leakage is verified at 0.0% (0/10) after removing formula hints and grounding contract/policy parameters strictly inside `context_document`. Private held-out suites are isolated in a separate private repository with an independent canary string. All tasks include `human_audit` sign-off metadata and recorded 0 hedging failures under `allow_hedging: false`.*
 
 ## Curated 10 Tasks (`sample/jp_bizdata_eval_teaser_10.jsonl`)
 

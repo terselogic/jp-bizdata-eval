@@ -454,6 +454,61 @@ def count_jp_business_days_2026(start_inclusive: date, end_inclusive: date) -> l
     return days
 
 
+def adjust_settlement_date_2026(
+    nominal_date: date,
+    *,
+    consecutive_holiday_pullback_threshold: int = 4,
+) -> tuple[date, int, str]:
+    """Adjust a 2026 settlement date using a grounded contract clause:
+    - If nominal_date is a business day, keep as-is.
+    - Otherwise count the contiguous non-business-day block containing nominal_date.
+    - If block length >= consecutive_holiday_pullback_threshold, move to preceding business day;
+      otherwise move to following business day.
+    """
+    if is_jp_business_day_2026(nominal_date):
+        return nominal_date, 0, "NO_ADJUSTMENT"
+    start = nominal_date
+    while not is_jp_business_day_2026(start - timedelta(days=1)):
+        start -= timedelta(days=1)
+    end = nominal_date
+    while not is_jp_business_day_2026(end + timedelta(days=1)):
+        end += timedelta(days=1)
+    block_len = (end - start).days + 1
+    if block_len >= consecutive_holiday_pullback_threshold:
+        return start - timedelta(days=1), block_len, "PREV_BUSINESS_DAY"
+    return end + timedelta(days=1), block_len, "NEXT_BUSINESS_DAY"
+
+
+def calc_grounded_settlement_schedule_2026(
+    *,
+    may_nominal_str: str,
+    sep_nominal_str: str,
+    consecutive_holiday_pullback_threshold: int = 4,
+) -> dict[str, Any]:
+    """Compute effective settlement dates & business day counts under grounded contract clause."""
+    may_nom = date.fromisoformat(may_nominal_str)
+    sep_nom = date.fromisoformat(sep_nominal_str)
+    may_eff, may_blk, may_rule = adjust_settlement_date_2026(
+        may_nom, consecutive_holiday_pullback_threshold=consecutive_holiday_pullback_threshold
+    )
+    sep_eff, sep_blk, sep_rule = adjust_settlement_date_2026(
+        sep_nom, consecutive_holiday_pullback_threshold=consecutive_holiday_pullback_threshold
+    )
+    gw_days = count_jp_business_days_2026(date(2026, 5, 1), date(2026, 5, 8))
+    sep_days = count_jp_business_days_2026(date(2026, 9, 18), date(2026, 9, 25))
+    return {
+        "applicable": True,
+        "may_contiguous_non_biz_days": may_blk,
+        "may_effective_settlement_date": may_eff.isoformat(),
+        "may_adjustment_direction": may_rule,
+        "may_gw_count": len(gw_days),
+        "sep_contiguous_non_biz_days": sep_blk,
+        "sep_effective_settlement_date": sep_eff.isoformat(),
+        "sep_adjustment_direction": sep_rule,
+        "sep_silver_week_count": len(sep_days),
+    }
+
+
 def calc_toriteki_compliance(
     *,
     contract_date_str: str,
