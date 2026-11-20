@@ -72,7 +72,7 @@ def extract_json_object_strict(raw_text: str) -> tuple[dict[str, Any], bool]:
 def extract_sql_query_strict(raw_text: str) -> tuple[str, bool]:
     """Extract a single read-only SQL query and reject extra prose or unsafe DDL/DML."""
     candidate, hedging = _strip_single_fence_strict(raw_text, "sql")
-    sql = candidate.rstrip(";").strip()
+    sql = candidate.strip().rstrip(";").strip()
     if not sql:
         raise ValueError("Empty SQL query.")
     if ";" in sql:
@@ -81,7 +81,7 @@ def extract_sql_query_strict(raw_text: str) -> tuple[str, bool]:
         raise ValueError("SQL query must start with SELECT or WITH.")
     if _FORBIDDEN_SQL_PATTERN.search(sql):
         raise ValueError("Forbidden write or DDL SQL keyword detected.")
-    if re.search(r"\b(または|あるいは|参考|注記|補足)\b", sql):
+    if re.search(r"(?:または|あるいは|参考|注記|補足)", sql):
         hedging = True
     return sql, hedging
 
@@ -163,10 +163,14 @@ def _rows_equal(
         ratio = matched / max(len(expected_rows), len(actual_rows))
         return len(expected_rows) == len(actual_rows) and matched == len(expected_rows), round(ratio, 4)
 
-    key_fn = lambda r: tuple("" if v is None else str(v) for v in r)
-    exp_sorted = sorted(expected_rows, key=key_fn)
-    act_sorted = sorted(actual_rows, key=key_fn)
-    matched = sum(1 for r1, r2 in zip(exp_sorted, act_sorted) if row_match(r1, r2))
+    unmatched_actual = list(actual_rows)
+    matched = 0
+    for exp_row in expected_rows:
+        for idx, act_row in enumerate(unmatched_actual):
+            if row_match(exp_row, act_row):
+                matched += 1
+                unmatched_actual.pop(idx)
+                break
     ratio = matched / max(len(expected_rows), len(actual_rows))
     return len(expected_rows) == len(actual_rows) and matched == len(expected_rows), round(ratio, 4)
 

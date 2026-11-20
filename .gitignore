@@ -6,6 +6,4 @@ dist/
 *.egg-info/
 .env
 .DS_Store
-predictions/*.jsonl
-predictions/report_gemini_38_flash_closed_book.json
-predictions/report_gemini_38_flash_open_book.json
+predictions/
